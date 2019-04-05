@@ -23,11 +23,16 @@ server.use(function(req, res, next) {
     next();
 });
 
-server.get('/jobs', function(req, res, next) {
-    connect.query("SELECT * FROM jobs WHERE status = 'new'", function (error, resultData, fields) {
-        console.log("Error: ", error);
-        console.log("Data: ", resultData);
-        console.log("Fields: ", fields);
+/* Get data endpoints */
+
+server.get('/invited-jobs', function(req, res, next) {
+    connect.query("SELECT j.*, s.name AS suburb_name, c.name AS category_name FROM jobs j LEFT JOIN suburbs s ON j.suburb_id = s.id LEFT JOIN categories c ON j.category_id = c.id WHERE j.status = 'new'", function (error, resultData, fields) {
+        res.send(resultData);
+    });
+});
+
+server.get('/accepted-jobs', function(req, res, next) {
+    connect.query("SELECT j.*, s.name AS suburb_name, c.name AS category_name FROM jobs j LEFT JOIN suburbs s ON j.suburb_id = s.id LEFT JOIN categories c ON j.category_id = c.id WHERE j.status = 'accepted'", function (error, resultData, fields) {
         res.send(resultData);
     });
 });

@@ -12,39 +12,41 @@ library.add(faMapMarkerAlt, faBriefcase);
 
 class App extends Component {
   constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        }
-    }
-  
-    componentDidMount() {
-      fetch('http://localhost:8080/jobs', {
-      })
-      .then(response => {
-        console.log(response);
-        return response.clone().json();
-      })
-      .then((data) => {
-        console.log(data);
-          // Set the state of data.
-          // this.setState({
-          //     data: data
-          // })
-      })
-      .catch((error) => {
-          console.log('Error: ', error);
-      });
-    }
+      super(props);
+      this.state = {
+          leads: []
+      }
+  }
+
+  queryLeads = (activeView) => {
+    if (!activeView) return;
+
+    const endpoint = `http://localhost:8080/${activeView}-jobs`;
+    fetch(endpoint)
+        .then(response => {
+            return response.clone().json();
+        })
+        .then((data) => {
+            console.log(data);
+            this.setState({
+              leads: data
+            });
+        })
+        .catch((error) => {
+            console.log('Error: ', error);
+        });
+  }
 
   render() {
+    this.queryLeads('invited');
+
     return (
       <div className="App">
         <Header />
         <div className="adminBlock">
           <div className="container">
             <TabGroup />
-            <Leads leads={[{id: 1}, {id: 2}]} />
+            <Leads leads={this.state.leads} />
           </div>
         </div>
       </div>
