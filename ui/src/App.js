@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faMapMarkerAlt, faBriefcase } from '@fortawesome/free-solid-svg-icons';
+
 import './App.css';
+
+import Header from './components/organisms/Header';
+import TabGroup from './components/molecules/TabGroup';
+import Leads from './components/organisms/Leads';
+
+library.add(faMapMarkerAlt, faBriefcase);
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +28,7 @@ class App extends Component {
       .then((data) => {
         console.log(data);
           // Set the state of data.
-          // this.setS  tate({
+          // this.setState({
           //     data: data
           // })
       })
@@ -31,7 +40,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        
+        <Header />
+        <div className="adminBlock">
+          <div className="container">
+            <TabGroup />
+            <Leads leads={[{id: 1}, {id: 2}]} />
+          </div>
+        </div>
       </div>
     );
   }

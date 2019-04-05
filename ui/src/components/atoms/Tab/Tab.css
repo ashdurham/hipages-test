@@ -1,0 +1,39 @@
+.a-tab {
+    height: 53px;
+    width: 100%;
+    line-height: 53px;
+    background-color: #ffffff;
+    font-size: 1.8rem;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border-right: 1px solid #e4e4e4;
+}
+
+.a-tab:last-child {
+    border-right: none;
+}
+
+.a-tab:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 0px;
+    width: 100%;
+    background-color: #ff7b11;
+    transition: height 0.3s ease-in-out;
+}
+
+.a-tab:hover {
+    background-color: #f8f8f8;
+}
+
+.a-tab.active {
+    font-weight: 700;
+}
+
+.a-tab.active:after {
+    height: 3px;
+}
