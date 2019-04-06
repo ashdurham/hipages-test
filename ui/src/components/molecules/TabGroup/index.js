@@ -19,12 +19,26 @@ class TabGroup extends Component {
                 key: "accepted"
             }
         ];
+        this.clickEvent = this.clickEvent.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.clickEvent(this.state.activeTab);
+    }
+
+    clickEvent(tabKey) {
+        this.setState({
+            activeTab: tabKey
+        });
+        this.props.clickEvent(tabKey);
+        
+        return true;
     }
 
     render() {
         const Tabs = () => {
             return this.tabs.map((tab, i) => {
-                return <Tab key={i} label={tab.label} tabKey={tab.key} classes={this.state.activeTab === tab.key ? "active" : ""} />
+                return <Tab key={i} label={tab.label} tabKey={tab.key} classes={this.state.activeTab === tab.key ? "active" : ""} onClickEvent={this.clickEvent} />
             })
         }
 

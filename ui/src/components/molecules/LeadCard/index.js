@@ -10,10 +10,24 @@ class LeadCard extends Component {
         const cardData = {}
 
         /* 
-         *  Get first name 
+         *  Handle display name 
          */
 
-        cardData.name = this.props.contact_name.split(' ')[0];
+        const displayName = () => {
+            let output = '';
+            switch (this.props.status) {
+                case 'accepted':
+                    output = this.props.contact_name;
+                    break;
+
+                default:
+                    // Default to first name to protect contacts privicy in the event of a different status
+                    output = this.props.contact_name.split(' ')[0];
+            }
+            
+            return output;
+        }
+        cardData.name = displayName();
 
         /* 
          *  Get contact initial 
@@ -37,6 +51,57 @@ class LeadCard extends Component {
         });
         cardData.price = moneyFormat.format(this.props.price);
 
+        const PriceData = ({displayStatus}) => {
+            if (this.props.status === displayStatus) {
+                return (
+                    <div className="detail price">
+                        <span>{cardData.price}</span> Lead Invitation
+                    </div>
+                )
+            }
+
+            return null;
+        }
+
+        /*
+         *  Display contact details
+         */
+
+        const ContactDetails = () => {
+            if (this.props.status === 'accepted') {
+                return (
+                    <div className="line l-contactInfo">
+                        <div className="detail phone">
+                            <Icon name="phone" /> {this.props.contact_phone}
+                        </div>
+                        <div className="detail email">
+                            <Icon name="envelope" /> {this.props.contact_email}
+                        </div>
+                    </div>
+                )
+            }
+
+            return null;
+        }
+
+        /* 
+         *  Display action line 
+         */
+
+        const ActionLine = () => {
+            if (this.props.status === 'new') {
+                return (
+                    <div className="line l-action">
+                        <Button label="Accept" onClickEvent={() => this.props.updateEvent(this.props.id, 'accepted')} />
+                        <Button label="Decline" type="secondary" onClickEvent={() => this.props.updateEvent(this.props.id, 'declined')} />
+                        <PriceData displayStatus="new" />
+                    </div>
+                )
+            }
+
+            return null;
+        }
+
         return (
             <div className="m-card">
                 <div className="line l-contactDetail">
@@ -57,19 +122,16 @@ class LeadCard extends Component {
                     <div className="detail jobId">
                         Job ID: {this.props.id}
                     </div>
+                    <PriceData displayStatus="accepted" />
                 </div>
+
+                <ContactDetails />
 
                 <div className="line l-description">
                     {this.props.description}
                 </div>
 
-                <div className="line l-action">
-                    <Button label="Accept" />
-                    <Button label="Decline" type="secondary" />
-                    <div className="detail price">
-                        <span>{cardData.price}</span> Lead Invitation
-                    </div>
-                </div>
+                <ActionLine />
             </div>
         )
     }

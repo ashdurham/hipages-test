@@ -37,6 +37,19 @@ server.get('/accepted-jobs', function(req, res, next) {
     });
 });
 
+/* Set data endpoints */
+
+server.get('/update-status', function(req, res, next) {
+    const valid_statuses = ['accepted', 'declined'];
+    if (req.query.hasOwnProperty("id") && req.query.hasOwnProperty("status") && valid_statuses.indexOf(req.query.status) > -1) {
+        connect.query("UPDATE jobs SET status = '"+req.query.status+"' WHERE id = '"+req.query.id+"'", function (error, resultData, fields) {
+            res.send(resultData);
+        });
+    } else {
+        next("ERROR: Data not supplied correctly");
+    }
+});
+
 server.listen(port, () => {
     console.log(`Server is listening at http://localhost:${port}`);
 });

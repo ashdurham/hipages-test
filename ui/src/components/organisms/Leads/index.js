@@ -7,9 +7,17 @@ class Leads extends Component {
 
     render() {
         const DisplayCards = () => {
-            return this.props.leads.map((lead, i) => {
-                return <LeadCard key={i} {...lead} />
-            })
+            if (this.props.leads.length > 0) {
+                return this.props.leads.map((lead, i) => {
+                    return <LeadCard key={i} updateEvent={this.props.updateEvent} {...lead} />
+                })
+            } else {
+                return (
+                    <div className="noRecords">
+                        There are currently no records to display
+                    </div>
+                )
+            }
         }
 
         return (
