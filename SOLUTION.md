@@ -3,8 +3,6 @@ Solution Documentation
 
 ## Initial project notes
 
-- `Docker up` will occasionally error `server` out if `mysql` hasn't finished setup. With time permitting, coding in wait feature into `server` to prevent the exit.
-
 - Ran into binding issues between docker and local environment when using the `node-sass` package. To avoid wasting time getting that working, made the decision to code raw CSS in order to ensure on-time delivery.
 
 ## Server
@@ -12,8 +10,6 @@ Solution Documentation
 I would expect a real world production environment to have a much more in depth setup for the various endpoints and processing that it would be covering. Especially for the `update` request endpoints - these would potentially be more suited to a queuing system to handle the heavy user-load times.
 
 Due to the limited endpoints required for the test, all functional code resides in the main index file.
-
-As meantioned in the inital project notes above, this would normally contain fallback processes should the Database not be online for whatever reason that may be. Additionally, error returns would also be included to ensure the user is fed back with notification of any issues.
 
 ## UI
 

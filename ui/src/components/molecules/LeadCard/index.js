@@ -39,7 +39,7 @@ class LeadCard extends Component {
          *  Format Date 
          */
 
-        cardData.createdAt = moment(this.props.created_at).format("MMMM, d @ h:mm a");
+        cardData.createdAt = moment(this.props.created_at).format("MMMM, D @ h:mm a");
 
         /* 
          *  Format and Output Price 
