@@ -13,8 +13,6 @@ const connect = mysql.createConnection({
     database: 'hipages'
 });
 
-connect.connect();
-
 /* Set headers to prevent cors errors */
 
 server.use(function(req, res, next) {
@@ -25,28 +23,40 @@ server.use(function(req, res, next) {
 
 /* Get data endpoints */
 
-server.get('/invited-jobs', function(req, res, next) {
+server.get('/invited-jobs', function(req, res) {
     connect.query("SELECT j.*, s.name AS suburb_name, c.name AS category_name FROM jobs j LEFT JOIN suburbs s ON j.suburb_id = s.id LEFT JOIN categories c ON j.category_id = c.id WHERE j.status = 'new'", function (error, resultData, fields) {
-        res.send(resultData);
+        if (error) {
+            res.send(error);
+        } else {
+            res.send(resultData);
+        }
     });
 });
 
-server.get('/accepted-jobs', function(req, res, next) {
+server.get('/accepted-jobs', function(req, res) {
     connect.query("SELECT j.*, s.name AS suburb_name, c.name AS category_name FROM jobs j LEFT JOIN suburbs s ON j.suburb_id = s.id LEFT JOIN categories c ON j.category_id = c.id WHERE j.status = 'accepted'", function (error, resultData, fields) {
-        res.send(resultData);
+        if (error) {
+            res.send(error);
+        } else {
+            res.send(resultData);
+        }
     });
 });
 
 /* Set data endpoints */
 
-server.get('/update-status', function(req, res, next) {
+server.get('/update-status', function(req, res) {
     const valid_statuses = ['accepted', 'declined'];
     if (req.query.hasOwnProperty("id") && req.query.hasOwnProperty("status") && valid_statuses.indexOf(req.query.status) > -1) {
         connect.query("UPDATE jobs SET status = '"+req.query.status+"' WHERE id = '"+req.query.id+"'", function (error, resultData, fields) {
-            res.send(resultData);
+            if (error) {
+                res.send(error);
+            } else {
+                res.send(resultData);
+            }
         });
     } else {
-        next("ERROR: Data not supplied correctly");
+        res.send({error: "ERROR: Data not supplied correctly"});
     }
 });
 

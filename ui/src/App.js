@@ -38,13 +38,22 @@ class App extends Component {
             return response.clone().json();
         })
         .then((data) => {
-            console.log(data);
+            let leadsData = false;
+
+            if (Array.isArray(data)) {
+              leadsData = data;
+            }
+
             this.setState({
-              leads: data
+              leads: leadsData
             });
         })
         .catch((error) => {
             console.log('Error: ', error);
+
+            this.setState({
+              leads: false
+            });
         });
   }
 
@@ -55,9 +64,14 @@ class App extends Component {
             return response.clone().json();
         })
         .then((data) => {
-            /* TODO: Code in error handling */
-            //console.log(data);
-            this.queryLeads(this.state.activeView);
+            if (data.affectedRows > 0) {
+              this.queryLeads(this.state.activeView);
+            } else {
+              console.log("Error occured");
+              /*
+               *  TODO: Add error notification to page to notify user.
+               */
+            }
         })
         .catch((error) => {
             console.log('Error: ', error);
