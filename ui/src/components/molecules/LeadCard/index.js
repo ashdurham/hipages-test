@@ -72,10 +72,10 @@ class LeadCard extends Component {
                 return (
                     <div className="line l-contactInfo">
                         <div className="detail phone">
-                            <Icon name="phone" /> {this.props.contact_phone}
+                            <Icon name="phone" /> <a href={`tel:${this.props.contact_phone}`}>{this.props.contact_phone}</a>
                         </div>
                         <div className="detail email">
-                            <Icon name="envelope" /> {this.props.contact_email}
+                            <Icon name="envelope" /> <a href={`mailto:${this.props.contact_email}`}>{this.props.contact_email}</a>
                         </div>
                     </div>
                 )

@@ -23,3 +23,9 @@ body {
   width: 90%;
   margin: 0 auto;
 }
+
+a {
+  color: #ff7b11;
+  transition: color 0.3s ease-in-out;
+  text-decoration: none;
+}
