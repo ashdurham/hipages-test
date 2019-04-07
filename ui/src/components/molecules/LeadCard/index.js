@@ -137,4 +137,8 @@ class LeadCard extends Component {
     }
 }
 
+LeadCard.defaultProps = {
+    updateEvent: null
+}
+
 export default LeadCard

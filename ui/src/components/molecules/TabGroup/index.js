@@ -50,4 +50,8 @@ class TabGroup extends Component {
     }
 }
 
+TabGroup.defaultProps = {
+    clickEvent: null
+}
+
 export default TabGroup

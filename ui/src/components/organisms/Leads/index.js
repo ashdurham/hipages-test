@@ -28,4 +28,9 @@ class Leads extends Component {
     }
 }
 
+TabGroup.defaultProps = {
+    leads: [],
+    updateEvent: null
+}
+
 export default Leads
