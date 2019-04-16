@@ -17,6 +17,10 @@ class TabGroup extends Component {
             {
                 label: "Accepted",
                 key: "accepted"
+            },
+            {
+                label: "Waitlisted",
+                key: "waitlisted"
             }
         ];
         this.clickEvent = this.clickEvent.bind(this);
