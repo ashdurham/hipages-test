@@ -15,23 +15,27 @@ const connect = mysql.createConnection({
 
 /* Function */
 
-const checkStatus = (id, cb) => {
-    connect.query("SELECT status, accept_count FROM jobs WHERE id = '"+id+"'", function (error, resultData, fields) {
-        if (error) {
-            cb('error', error);
-        } else {
-            cb('success', resultData);
-        }
+const checkStatus = (id) => {
+    return new Promise((res, rej) => {
+        connect.query("SELECT status, accept_count FROM jobs WHERE id = '"+id+"'", function (error, resultData, fields) {
+            if (error) {
+                rej(error);
+            } else {
+                res(resultData);
+            }
+        });
     });
 }
 
-const updateStatus = (id, status, jobCount, cb) => {
-    connect.query("UPDATE jobs SET status = '"+status+"', accept_count = '"+jobCount+"' WHERE id = '"+id+"'", function (error, resultData, fields) {
-        if (error) {
-            cb('error', error);
-        } else {
-            cb('success', resultData);
-        }
+const updateStatus = (id, status, jobCount) => {
+    return new Promise((res, rej) => {
+        connect.query("UPDATE jobs SET status = '"+status+"', accept_count = '"+jobCount+"' WHERE id = '"+id+"'", function (error, resultData, fields) {
+            if (error) {
+                rej(error);
+            } else {
+                res(resultData);
+            }
+        });
     });
 }
 
@@ -81,8 +85,7 @@ server.get('/check-status', function(req, res) {
     const valid_statuses = ['accepted', 'declined', 'waitlisted'];
     if (req.query.hasOwnProperty("id") && req.query.hasOwnProperty("status") && valid_statuses.indexOf(req.query.status) > -1) {
         let jobCount, status;
-        checkStatus(req.query.id, function(status, result) {
-            //res.send(resultData);
+        checkStatus(req.query.id).then((result) => {
             const jobData = result[0];
             status = req.query.status;
             jobCount = jobData.accept_count;
@@ -90,24 +93,14 @@ server.get('/check-status', function(req, res) {
             if (status === 'accepted') {
                 if (jobCount < 3) {
                     jobCount++;
-                    updateStatus(req.query.id, status, jobCount, function(status, result) {
-                        // if (status == 'error') {
-                        //     res.send(result);
-                        // } else {
-                        //     res.send(result);
-                        // }
+                    updateStatus(req.query.id, status, jobCount).then((result) => {
                         res.send(result);
                     });
                 } else {
                     res.send({confirm: true});
                 }
             } else {
-                updateStatus(req.query.id, status, jobCount, function(status, result) {
-                    // if (status == 'error') {
-                    //     res.send(result);
-                    // } else {
-                    //     res.send(result);
-                    // }
+                updateStatus(req.query.id, status, jobCount).then((result) => {
                     res.send(result);
                 });
             }
@@ -122,17 +115,12 @@ server.get('/update-status', function(req, res) {
     if (req.query.hasOwnProperty("id") && req.query.hasOwnProperty("status") && valid_statuses.indexOf(req.query.status) > -1) {
         // TODO: Get count from DB - jobCount
         let jobCount, status;
-        checkStatus(req.query.id, function(s, result) {
+        checkStatus(req.query.id).then((result) => {
             const jobData = result[0];
             status = req.query.status;
             jobCount = jobData.accept_count + 1;
 
-            updateStatus(req.query.id, status, jobCount, function(status, result) {
-                // if (status == 'error') {
-                //     res.send(result);
-                // } else {
-                //     res.send(result);
-                // }
+            updateStatus(req.query.id, status, jobCount).then((result) => {
                 res.send(result);
             });
         });
